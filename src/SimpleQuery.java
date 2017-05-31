@@ -100,7 +100,7 @@ public class SimpleQuery extends Query {
 				return null;
 
 			return new SimpleScorer(this, termDocs, similarity, reader
-					.norms(term.field()), idf,avgLength);
+					.norms(term.field()), idf, avgLength);
 		}
 
 		@Override

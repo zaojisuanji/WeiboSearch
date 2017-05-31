@@ -53,6 +53,7 @@ public class TieziIndexer {
 				Node node=nodeList.item(i);
 				NamedNodeMap map=node.getAttributes();
 				Node nickname=map.getNamedItem("nickname");
+				Node personlink=map.getNamedItem("personlink");
 				Node text=map.getNamedItem("text");
 				Node image=map.getNamedItem("image");
 				Node favorite=map.getNamedItem("favorite");
@@ -64,10 +65,11 @@ public class TieziIndexer {
 				Node zf_text=map.getNamedItem("zf_text");
 				Node zf_image=map.getNamedItem("zf_image");
 				
-				String textString = text.getNodeValue()+"#$%"+zf_text.getNodeValue(); //#$%起到分隔原贴和转发贴的作用
+				String textString = text.getNodeValue()+"%%%"+zf_text.getNodeValue(); //#$%起到分隔原贴和转发贴的作用
 				Document document = new Document();
 				Field tieziTextField = new Field("tieziText", textString, Field.Store.YES, Field.Index.ANALYZED);
-				Field nicknameField = new Field("nickname", nickname.getNodeValue(), Field.Store.YES, Field.Index.NO);
+				Field nicknameField = new Field("nickname", nickname.getNodeValue(), Field.Store.YES, Field.Index.ANALYZED);
+				Field personlinkField = new Field("personlink", personlink.getNodeValue(), Field.Store.YES, Field.Index.NO);
 				Field imageField = new Field("image", image.getNodeValue(), Field.Store.YES, Field.Index.NO);
 				Field favField = new Field("favorite", favorite.getNodeValue(), Field.Store.YES, Field.Index.NO);
 				Field fwdField = new Field("forwarding", forwarding.getNodeValue(), Field.Store.YES, Field.Index.NO);
@@ -76,10 +78,12 @@ public class TieziIndexer {
 				Field hzfField = new Field("has_zf", has_zhuanfa.getNodeValue(), Field.Store.YES, Field.Index.NO);
 				Field zfnicknameField = new Field("zf_nickname", zf_nickname.getNodeValue(), Field.Store.YES, Field.Index.NO);
 				Field zfimageField = new Field("zf_image", zf_image.getNodeValue(), Field.Store.YES, Field.Index.NO);
+				tieziTextField.setBoost(5.5f);
 				
 				averageLength += textString.length();
 				document.add(tieziTextField);
 				document.add(nicknameField);
+				document.add(personlinkField);
 				document.add(imageField);
 				document.add(favField);
 				document.add(fwdField);

@@ -40,7 +40,7 @@ public class PeopleSearcher {
 	
 	public TopDocs searchQuery(String queryString,int maxnum){
 		try {
-			Term term=new Term("",queryString);
+			Term term=new Term("name",queryString);
 			//Query tmpQuery = new MultiTermQuery(term,avgLength);
 			Query query=new SimpleQuery(term,nameLength);
 			query.setBoost(1.0f);
@@ -84,12 +84,15 @@ public class PeopleSearcher {
 	}
 	
 	public static void main(String[] args){
-		ImageSearcher search=new ImageSearcher("forIndex/index");
+		PeopleSearcher search=new PeopleSearcher("forIndex/index");
 		search.loadGlobals("forIndex/global.txt");
 		System.out.println("avg length = "+search.getAvg());
 		
-		TopDocs results=search.searchQuery("ËÎ×æµÂ", "abstract", 100);
+		TopDocs results=search.searchQuery("ÁõÞÈÈº",100);
 		ScoreDoc[] hits = results.scoreDocs;
+		System.out.println("hits");
+		System.out.println(hits.length);
+		
 		for (int i = 0; i < hits.length; i++) { // output raw format
 			Document doc = search.getDoc(hits[i].doc);
 			System.out.println("doc=" + hits[i].doc + " score="
